@@ -1,0 +1,9 @@
+shubenOS 1.0
+Copyright (c) 2026 shuben / Apelegends. All rights reserved.
+
+The original shubenOS parts (branding, wallpaper, theme/configuration files, SmartShell
+terminal explainer, helper scripts, boot menu) belong to shuben / Apelegends.
+
+shubenOS is built from Debian GNU/Linux and other free software (Linux kernel, GRUB,
+Mesa, Calamares, ...). Those packages keep their own licenses, which are installed in
+/usr/share/doc/<package>/copyright. Nothing here changes those licenses.

@@ -1,0 +1,13 @@
+#!/bin/sh
+# shubenOS 1.0 session startup
+lxpolkit &
+feh --bg-fill /usr/share/backgrounds/shubenOS/wallpaper.png &
+( picom --config "$HOME/.config/picom/picom.conf" -b || picom --backend xrender -b ) &
+nm-applet &
+tint2 &
+/usr/share/shubenOS/shuben-dock-setup.sh
+plank &
+# Boot menu "Install / Dual-boot" entry starts the installer automatically
+if grep -q 'shuben.install' /proc/cmdline 2>/dev/null; then
+  ( sleep 4; sudo -E calamares ) &
+fi

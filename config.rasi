@@ -1,0 +1,9 @@
+configuration {
+  modi: "drun,run";
+  show-icons: true;
+  icon-theme: "Papirus-Dark";
+  display-drun: "  shubenOS";
+  drun-display-format: "{name}";
+  font: "Inter 12";
+}
+@theme "shuben"

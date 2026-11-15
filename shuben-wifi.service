@@ -1,0 +1,11 @@
+[Unit]
+Description=shubenOS Wi-Fi helper
+After=NetworkManager.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/share/shubenOS/shuben-wifi.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

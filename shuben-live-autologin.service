@@ -1,0 +1,13 @@
+[Unit]
+Description=shubenOS live session autologin (live boot only)
+ConditionKernelCommandLine=boot=live
+After=live-config.service
+Before=display-manager.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/install -D -m 644 /usr/share/shubenOS/lightdm-autologin.conf /etc/lightdm/lightdm.conf.d/50-shuben-autologin.conf
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=shubenOS Start
+Comment=Open the app menu
+Exec=rofi -show drun
+Icon=/usr/share/pixmaps/shubenos.png
+Terminal=false
+Categories=System;
+NoDisplay=true
