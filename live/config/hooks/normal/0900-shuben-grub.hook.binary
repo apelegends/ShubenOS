@@ -1,0 +1,8 @@
+#!/bin/sh
+set -e
+K=$(cd binary/live && ls vmlinuz* | head -n1)
+I=$(cd binary/live && ls initrd.img* | head -n1)
+mkdir -p binary/boot/grub/fonts
+for f in /usr/share/grub/unicode.pf2; do [ -f "$f" ] && cp "$f" binary/boot/grub/fonts/unicode.pf2 || true; done
+sed -e "s|@KERNEL@|/live/$K|g" -e "s|@INITRD@|/live/$I|g" binary/boot/grub/grub.cfg.in > binary/boot/grub/grub.cfg
+rm -f binary/boot/grub/grub.cfg.in

@@ -1,0 +1,53 @@
+#!/bin/sh
+set -e
+
+# --- OS identity ---
+cat > /usr/lib/os-release <<'OSR'
+PRETTY_NAME="shubenOS 1.0"
+NAME="shubenOS"
+VERSION_ID="1.0"
+VERSION="1.0 (Dawn)"
+VERSION_CODENAME=bookworm
+ID=shubenos
+ID_LIKE=debian
+HOME_URL="https://shuben.dev"
+OSR
+ln -sf ../usr/lib/os-release /etc/os-release
+echo "shubenOS" > /etc/hostname
+
+# --- Boot-loader defaults that also apply to the INSTALLED system ---
+mkdir -p /etc/default/grub.d
+cat > /etc/default/grub.d/shuben.cfg <<'G'
+GRUB_DISTRIBUTOR="shubenOS"
+GRUB_DISABLE_OS_PROBER=false
+G
+
+# --- Openbox: Windows-style title buttons, modern theme, shortcuts ---
+mkdir -p /etc/skel/.config/openbox
+cp /etc/xdg/openbox/rc.xml /etc/skel/.config/openbox/rc.xml
+T=Onyx; [ -d /usr/share/themes/Arc-Dark/openbox-3 ] && T=Arc-Dark
+sed -i "/<theme>/,/<\/theme>/ s|<name>[^<]*</name>|<name>$T</name>|" /etc/skel/.config/openbox/rc.xml
+cat > /tmp/kb.xml <<'KB'
+    <keybind key="W-space"><action name="Execute"><command>rofi -show drun</command></action></keybind>
+    <keybind key="W-e"><action name="Execute"><command>thunar</command></action></keybind>
+    <keybind key="W-Return"><action name="Execute"><command>xfce4-terminal</command></action></keybind>
+KB
+awk 'FNR==NR{ins=ins $0 "\n"; next} /<\/keyboard>/{printf "%s", ins} {print}' /tmp/kb.xml /etc/skel/.config/openbox/rc.xml > /tmp/rc.new
+mv /tmp/rc.new /etc/skel/.config/openbox/rc.xml
+
+# --- LightDM: use openbox as the session ---
+mkdir -p /etc/lightdm/lightdm.conf.d
+printf '[Seat:*]\ngreeter-session=lightdm-gtk-greeter\nuser-session=openbox\n' > /etc/lightdm/lightdm.conf.d/10-shuben.conf
+
+# --- Terminal explainer in every interactive bash ---
+printf '\n# shubenOS SmartShell\n[ -f /usr/share/shubenOS/shuben-explain.sh ] && . /usr/share/shubenOS/shuben-explain.sh\n' >> /etc/bash.bashrc
+
+# --- Installer branding (Calamares) ---
+B=/etc/calamares/branding/debian/branding.desc
+if [ -f "$B" ]; then
+  sed -i -E 's/^( *productName:).*/\1 shubenOS/; s/^( *shortProductName:).*/\1 shubenOS/; s/^( *version:).*/\1 1.0/; s/^( *shortVersion:).*/\1 1.0/; s/^( *versionedName:).*/\1 shubenOS 1.0/; s/^( *shortVersionedName:).*/\1 shubenOS 1.0/' "$B" || true
+fi
+
+# --- Services ---
+systemctl enable shuben-wifi.service shuben-live-autologin.service || true
+systemctl enable lightdm.service || true
