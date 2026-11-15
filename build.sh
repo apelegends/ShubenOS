@@ -12,7 +12,7 @@ apt-get install -y --no-install-recommends live-build debootstrap squashfs-tools
   mtools dosfstools rsync ca-certificates grub-common grub-pc-bin grub-efi-amd64-bin \
   grub-efi-amd64-signed shim-signed isolinux syslinux-common
 
-rm -rf /build && mkdir -p /build && rsync -a "$HERE/live/" /build/
+rm -rf /build && mkdir -p /build && cp -r "$HERE/live/." /build/
 cd /build
 chmod +x auto/config config/hooks/normal/* 2>/dev/null || true
 lb clean --purge >/dev/null 2>&1 || true
