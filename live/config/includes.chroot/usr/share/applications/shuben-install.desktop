@@ -1,9 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=Install shubenOS
-Comment=Install next to Windows or another OS, or on a whole disk
-Exec=sudo -E calamares
-Icon=/usr/share/pixmaps/shubenos.png
-Terminal=false
-Categories=System;
-TryExec=/usr/bin/calamares
